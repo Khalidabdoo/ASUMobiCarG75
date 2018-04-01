@@ -6,6 +6,8 @@ int m3 = 6;
 int m4 = 9;
 int LEDFUSS = 4;
 int USSCHECK = 0;
+int LMSPEED = 165;
+int RMSPEED = 205;
 
 /*
    ex.: Ultrasonic ultrasonic1 (trigpin, echopin)
@@ -33,16 +35,16 @@ void loop() {
   // put your main code here, to run repeatedly:
   if (Serial.available() > 0) {
     bt = Serial.read();
-    if ( bt == 'V'){
+   //enable ultrasonic sensor
+     if ( bt == 'V'){
       USSCHECK = 1;
     }
     else if ( bt == 'v'){
       USSCHECK = 0;
     }
     stopp(); //initialize with motors stoped
-    //Change pin mode only if new command is different from previous.
-    //Serial.println(command);
-   
+
+// Car Control   
 
       switch (bt) {
 
@@ -64,16 +66,19 @@ void loop() {
           
 
       }
-      if( (USSCHECK == 1 )&& (FUSS.distanceRead() < 10) && (FUSS.distanceRead() > 0)) {
+  
+     //obstacle avoiding technique 
+     if( (USSCHECK == 1 )&& (FUSS.distanceRead() < 10) && (FUSS.distanceRead() > 0)) {
       Serial.print("Obstacle Ahead  : "); Serial.println(FUSS.distanceRead());
 
       stopp();
       delay(500);
       right();
-      delay(1000);
+      delay(1200);
       stopp();
       return 0;
-    }else{
+    }
+     else{
       return 0;
     }
     
@@ -81,32 +86,32 @@ void loop() {
 }
 
 void forward() {
-  analogWrite(m1, 165);
+  analogWrite(m1, LMSPEED);
   analogWrite(m2, 0);
-  analogWrite(m3, 208);
+  analogWrite(m3, RMSPEED);
   analogWrite(m4, 0);
 
 }
 
 void backward() {
   analogWrite(m1, 0);
-  analogWrite(m2, 165);
+  analogWrite(m2, LMSPEED);
   analogWrite(m3, 0);
-  analogWrite(m4, 208);
+  analogWrite(m4, RMSPEED);
 }
 
 void right() {
   analogWrite(m1, 0);
-  analogWrite(m2, 165);
-  analogWrite(m3, 208);
+  analogWrite(m2, LMSPEED);
+  analogWrite(m3, RMSPEED);
   analogWrite(m4, 0);
 }
 
 void left() {
-  analogWrite(m1, 165);
+  analogWrite(m1, LMSPEED);
   analogWrite(m2, 0);
   analogWrite(m3, 0);
-  analogWrite(m4, 208);
+  analogWrite(m4, RMSPEED);
 }
 
 void stopp() {
