@@ -1,0 +1,63 @@
+#include <l298n_lib.h>
+
+int signalPinM = 2; // connected to digital pin 2
+int signalPinR = 4; // Right  to digital pin 4
+int signalPinL = 7; // Left sensor to pin 7
+
+void setup() {
+
+  set_pins(3, 5, 6, 9, 8, 10);
+
+
+  pinMode(signalPinM, INPUT);
+  pinMode(signalPinR, INPUT);
+  pinMode(signalPinL, INPUT); // initialize the digital pins
+
+  Serial.begin(9600); // initialize serial communications
+
+}
+
+// the loop() method runs over and over again,
+// as long as the Arduino has power
+
+void loop()
+
+{
+  if (LOW == digitalRead(signalPinM)) {
+
+    Serial.println("black Forward ");
+
+    //FORWARD
+    lmot('F', 255);
+    dmot('F', 190);
+
+  }
+
+  if ( LOW == digitalRead(signalPinR))
+
+  {
+    Serial.println("black Right");
+
+    //RIGHT
+    lmot('B', 0);
+    dmot('F', 255);
+  }
+
+  if (LOW == digitalRead(signalPinL))
+
+  {
+    Serial.println("black Left");
+
+    //LEFT
+    lmot('F', 255);
+    dmot('B', 0);
+  }
+  if ( LOW == digitalRead(signalPinL) && LOW == digitalRead(signalPinR) && LOW == digitalRead(signalPinM))
+  {
+    //FORWARD
+    lmot('F', 255);
+    dmot('F', 255);
+  }
+  
+  
+}
